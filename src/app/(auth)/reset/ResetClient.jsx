@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import Link from "next/link";
 
 import styles from "./Reset.module.scss";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "@/firebase/firebase";
 
 function ResetClient() {
   const [email, setEmail] = useState("");
