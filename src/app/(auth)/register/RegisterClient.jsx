@@ -14,6 +14,7 @@ import Loader from "@/components/loader/Loader";
 import Image from "next/image";
 
 import styles from "../login/Auth.module.scss";
+import { auth } from "@/firebase/firebase";
 
 function RegisterClient() {
   const [email, setEmail] = useState("");
