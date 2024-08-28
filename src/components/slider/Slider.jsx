@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
-import styles from "./Slider.module.css";
+import styles from "./Slider.module.scss";
+import sliderData from "./SliderData.js";
 
 function Slider() {
   const [currentSlide, setCurrentSlide] = useState(0);
