@@ -7,16 +7,19 @@ import { auth } from "@/firebase/firebase";
 import { toast } from "react-toastify";
 import { usePathname, useRouter } from "next/navigation";
 import InnerHeader from "../innerHeader/InnerHeader";
-// import {
-//   REMOVE_ACTIVE_USER,
-//   SET_ACTIVE_USER,
-//   selectIsLoggedIn,
-// } from "@/redux/slice/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  REMOVE_ACTIVE_USER,
+  selectIsLoggedIn,
+  SET_ACTIVE_USER,
+} from "@/redux/slice/authSlice";
 
 const Header = () => {
-  const pathname = usePathname();
   const [displayName, setDisplayName] = useState("");
+  const pathname = usePathname();
   const router = useRouter();
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -32,20 +35,20 @@ const Header = () => {
         }
 
         //  유저 정보를 리덕스 스토어에 저장하기
-        // dispatch(
-        //   SET_ACTIVE_USER({
-        //     email: user.email,
-        //     userName: user.displayName ? user.displayName : displayName,
-        //     userID: user.uid,
-        //   })
-        // );
+        dispatch(
+          SET_ACTIVE_USER({
+            email: user.email,
+            userName: user.displayName ? user.displayName : displayName,
+            userID: user.uid,
+          })
+        );
       } else {
         setDisplayName("");
         // 유저 정보를 리덕스 스토어에서 지우기
-        // dispatch(REMOVE_ACTIVE_USER());
+        dispatch(REMOVE_ACTIVE_USER());
       }
     });
-  }, [displayName]);
+  }, [dispatch, displayName]);
 
   const logoutUser = () => {
     signOut(auth)
@@ -70,38 +73,38 @@ const Header = () => {
     <header>
       <div className={styles.loginBar}>
         <ul className={styles.list}>
-          {/* {!isLoggedIn ? (
+          {!isLoggedIn ? (
             <li className={styles.item}>
               <Link href={"/login"}>로그인</Link>
             </li>
-          ) : ( */}
-          <>
-            <li className={styles.item}>
-              <Link href={"/admin/dashboard"}>관리자</Link>
-            </li>
+          ) : (
+            <>
+              <li className={styles.item}>
+                <Link href={"/admin/dashboard"}>관리자</Link>
+              </li>
 
-            <li className={styles.item}>
-              <Link href={"/order-history"}>주문 목록</Link>
-            </li>
-            <li className={styles.item}>
-              <Link href={"/"} onClick={logoutUser}>
-                로그아웃
-              </Link>
-            </li>
+              <li className={styles.item}>
+                <Link href={"/order-history"}>주문 목록</Link>
+              </li>
+              <li className={styles.item}>
+                <Link href={"/"} onClick={logoutUser}>
+                  로그아웃
+                </Link>
+              </li>
 
-            <li className={styles.item}>
-              <Link href={"/"}>제휴 마케팅</Link>
-            </li>
+              <li className={styles.item}>
+                <Link href={"/"}>제휴 마케팅</Link>
+              </li>
 
-            <li className={styles.item}>
-              <Link href={"/"}>쿠팡 플레이</Link>
-            </li>
+              <li className={styles.item}>
+                <Link href={"/"}>쿠팡 플레이</Link>
+              </li>
 
-            <li className={styles.item}>
-              <Link href={"/"}>고객센터</Link>
-            </li>
-          </>
-          {/* )} */}
+              <li className={styles.item}>
+                <Link href={"/"}>고객센터</Link>
+              </li>
+            </>
+          )}
         </ul>
       </div>
       {pathname.startsWith("/admin") ? null : <InnerHeader />}
